@@ -2,4 +2,33 @@
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  font-weight: 500;
+}
+.library {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.library .music {
+  height: 200px;
+  width: 500px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5% 15%;
+  cursor: pointer;
+}
+.play-section {
+  text-align: center;
+}
+.play-section h3,
+.play-section i {
+  margin: 10px 0;
+}
+.play-section i {
+  font-size: 30px;
+  display: block;
+  margin: auto;
+  color: #2ecc71;
+  cursor: pointer;
 }
