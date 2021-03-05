@@ -14,7 +14,16 @@
     <title>Audio player</title>
   </head>
   <body>
-    <input type="file" name="" id="fileUpload" oninput="test(event)" />
+    <div class="import-file-bcg" id="import-file-bcg">
+      <div class="import-file">
+        <input type="file" name="" id="file-upload" oninput="getFile(event)" />
+        <button onclick="openFile()">Choose File</button>
+        <input type="text" name="" id="name" placeholder="Name" autocomplete="off" />
+        <h3 id="file-details"></h3>
+        <button onclick="saveSong(false)">Save</button>
+      </div>
+    </div>
+    <button id="import-song" onclick="saveSong(true)">Import Song</button>
     <div class="library" id="library"></div>
     <div class="play-section">
       <h3 id="music-playing"></h3>
