@@ -17,15 +17,24 @@ if (musicPlaying.innerHTML == "") {
   musicPlaying.innerHTML = "No music is playing";
 }
 
+var musicDuration = document.getElementById("music-duration");
+
+var musicInterval;
+
 function startMusic(id) {
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
+      clearInterval(musicInterval);
       musicPlaying.innerHTML = musicList[i].name;
       audio.src = musicList[i].file;
       audio.currentTime = 0;
       audio.volume = 0.01;
       buttonPlaying.className = "fas fa-play";
       audio.play();
+      musicInterval = setInterval(function () {
+        musicDuration.innerHTML =
+          Math.round(audio.currentTime * 10) / 10 + " / " + Math.round(audio.duration * 10) / 10;
+      });
     }
   }
 }
