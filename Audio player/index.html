@@ -16,6 +16,7 @@
   <body>
     <div class="import-file-bcg" id="import-file-bcg">
       <div class="import-file">
+        <i class="fas fa-times" onclick="closeSection()"></i>
         <input type="file" name="" id="file-upload" oninput="getFile(event)" />
         <button onclick="openFile()">Choose File</button>
         <input type="text" name="" id="name" placeholder="Name" autocomplete="off" />
@@ -29,6 +30,7 @@
       <h3 id="music-playing"></h3>
       <audio src="" id="audio"></audio>
       <h3 id="music-duration"></h3>
+      <input type="range" name="" id="range-duration" />
       <i class="fas fa-play" id="button-playing"></i>
     </div>
     <script src="app.js"></script>

@@ -8,6 +8,7 @@ for (var i = 0; i < musicList.length; i++) {
   library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
     <h1>${musicList[i].name}</h1>
     <h4>Size: ${musicList[i].size}MB</h4>
+    <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
   </div>`;
 }
 
@@ -18,28 +19,73 @@ if (musicPlaying.innerHTML == "") {
 }
 
 var musicDuration = document.getElementById("music-duration");
+var rangeDuration = document.getElementById("range-duration");
 
-var musicInterval;
+var musicInterval, getTime;
 
 function startMusic(id) {
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
       clearInterval(musicInterval);
+      rangeDuration.style.display = "inline";
+      var idPlayingClass = document.querySelectorAll(".id-playing");
+      idPlayingClass.forEach((id) => {
+        id.innerHTML = "";
+      });
+      var idPlaying = document.getElementById("playing" + musicList[i].id);
+      idPlaying.innerHTML = "Playing...";
       musicPlaying.innerHTML = musicList[i].name;
       audio.src = musicList[i].file;
       audio.currentTime = 0;
       audio.volume = 0.01;
       buttonPlaying.className = "fas fa-play";
       audio.play();
+
       musicInterval = setInterval(function () {
-        musicDuration.innerHTML =
-          Math.round(audio.currentTime * 10) / 10 + " / " + Math.round(audio.duration * 10) / 10;
+        audioConvertMinutesAndSeconds(audio.currentTime, audio.duration);
+
+        rangeDuration.max = Math.floor(audio.duration);
+        rangeDuration.value = Math.floor(audio.currentTime);
+
+        if (audio.currentTime == audio.duration) {
+          buttonPlaying.className = "fas fa-pause";
+        }
       });
     }
   }
 }
 
-var getTime;
+function audioConvertMinutesAndSeconds(audioCurrentTime, audioDuration) {
+  var audioCurrentTimeMinutes = Math.floor(audioCurrentTime / 60);
+  var audioCurrentTimeSeconds = Math.floor(audioCurrentTime) - audioCurrentTimeMinutes * 60;
+
+  var audioDurationMinutes = Math.floor(audioDuration / 60);
+  var audioDurtaionSeconds = Math.floor(audioDuration) - audioDurationMinutes * 60;
+
+  if (audioCurrentTimeMinutes < 10) {
+    audioCurrentTimeMinutes = "0" + audioCurrentTimeMinutes;
+  }
+  if (audioCurrentTimeSeconds < 10) {
+    audioCurrentTimeSeconds = "0" + audioCurrentTimeSeconds;
+  }
+  if (audioDurationMinutes < 10) {
+    audioDurationMinutes = "0" + audioDurationMinutes;
+  }
+  if (audioDurtaionSeconds < 10) {
+    audioDurtaionSeconds = "0" + audioDurtaionSeconds;
+  }
+
+  musicDuration.innerHTML = `${audioCurrentTimeMinutes}:${audioCurrentTimeSeconds} / ${audioDurationMinutes}:${audioDurtaionSeconds}`;
+}
+
+rangeDuration.addEventListener("input", function () {
+  audio.currentTime = rangeDuration.value;
+  getTime = rangeDuration.value;
+
+  if (rangeDuration.value == Math.floor(audio.duration)) {
+    buttonPlaying.className = "fas fa-pause";
+  }
+});
 
 buttonPlaying.addEventListener("click", function () {
   if (this.className == "fas fa-play") {
@@ -87,6 +133,7 @@ function saveSong(status) {
         library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
         <h1>${musicList[i].name}</h1>
         <h4>Size: ${musicList[i].size}MB</h4>
+        <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
       </div>`;
       }
       inputName.value = "";
@@ -95,4 +142,8 @@ function saveSong(status) {
   } else {
     importFileBcg.style.display = "block";
   }
+}
+
+function closeSection() {
+  importFileBcg.style.display = "none";
 }

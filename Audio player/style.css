@@ -21,13 +21,16 @@
   flex-direction: column;
 }
 .library .music {
-  height: 200px;
-  width: 500px;
+  height: 100px;
+  width: 200px;
   background: #e0e0e0;
   border-radius: 10px;
   padding: 10px;
-  margin: 5% 15%;
+  margin: 30px;
   cursor: pointer;
+}
+.library .music h1 {
+  font-size: 25px;
 }
 .import-file-bcg {
   background: rgba(0, 0, 0, 0.5);
@@ -54,6 +57,13 @@
 .import-file-bcg .import-file input[type="text"],
 .import-file button {
   margin: 10px 0;
+}
+.import-file-bcg .import-file i {
+  font-size: 25px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 .import-file-bcg .import-file input[type="file"] {
   display: none;
@@ -90,13 +100,16 @@
   width: 100%;
 }
 .play-section h3,
-.play-section i {
-  margin: 20px 0;
+.play-section input[type="range"] {
+  margin: 5px 0;
+}
+.play-section input[type="range"] {
+  display: none;
 }
 .play-section i {
   font-size: 30px;
   display: block;
-  margin: auto;
+  margin: 5px auto;
   color: #2ecc71;
   cursor: pointer;
 }
