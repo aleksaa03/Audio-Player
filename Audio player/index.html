@@ -27,11 +27,28 @@
     <button id="import-song" onclick="saveSong(true)">Import Song</button>
     <div class="library" id="library"></div>
     <div class="play-section">
-      <h3 id="music-playing"></h3>
-      <audio src="" id="audio"></audio>
-      <h3 id="music-duration"></h3>
-      <input type="range" name="" id="range-duration" />
-      <i class="fas fa-play" id="button-playing"></i>
+      <div class="play">
+        <h3 id="music-playing"></h3>
+        <audio src="" id="audio"></audio>
+        <h3 id="music-duration"></h3>
+        <input type="range" name="" id="range-duration" />
+        <div class="play-controls">
+          <i class="fas fa-step-backward"></i>
+          <i class="fas fa-play-circle" id="button-playing"></i>
+          <i class="fas fa-step-forward"></i>
+        </div>
+      </div>
+      <div class="volume">
+        <h3 id="number-volume">50%</h3>
+        <input
+          type="range"
+          name=""
+          id="range-volume"
+          step="0.01"
+          max="1"
+          oninput="musicVolume(event)"
+        />
+      </div>
     </div>
     <script src="app.js"></script>
   </body>

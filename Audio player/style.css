@@ -98,18 +98,31 @@
   transform: translateX(-50%);
   border-top: 2px solid #e0e0e0;
   width: 100%;
+  height: 100px;
+  padding: 5px;
 }
-.play-section h3,
-.play-section input[type="range"] {
+.play-section .play h3,
+.play-section .play input[type="range"] {
   margin: 5px 0;
 }
-.play-section input[type="range"] {
+.play-section .play input[type="range"] {
   display: none;
+  width: 300px;
 }
-.play-section i {
+.play-section .play .play-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.play-section .play .play-controls i {
   font-size: 30px;
   display: block;
-  margin: 5px auto;
+  margin: 5px 10px;
   color: #2ecc71;
   cursor: pointer;
+}
+.play-section .volume {
+  position: absolute;
+  top: 80px;
+  right: 20px;
 }

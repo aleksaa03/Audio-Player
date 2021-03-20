@@ -2,7 +2,20 @@ var audio = document.getElementById("audio");
 var library = document.getElementById("library");
 var buttonPlaying = document.getElementById("button-playing");
 
-var musicList = [];
+var musicList = [
+  // {
+  //   name: "Hot",
+  //   id: 0,
+  //   size: 4.54,
+  //   file: "media/hot.mp3",
+  // },
+  // {
+  //   name: "loud",
+  //   id: 1,
+  //   size: 4.54,
+  //   file: "media/loud_indian_music.mp3",
+  // },
+];
 
 for (var i = 0; i < musicList.length; i++) {
   library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
@@ -28,17 +41,21 @@ function startMusic(id) {
     if (musicList[i].id == id) {
       clearInterval(musicInterval);
       rangeDuration.style.display = "inline";
-      var idPlayingClass = document.querySelectorAll(".id-playing");
-      idPlayingClass.forEach((id) => {
-        id.innerHTML = "";
-      });
-      var idPlaying = document.getElementById("playing" + musicList[i].id);
-      idPlaying.innerHTML = "Playing...";
+      var musicContainer = document.querySelectorAll(".music");
+
+      for (let i = 0; i < musicContainer.length; i++) {
+        musicContainer[i].style.background = "#e0e0e0";
+        musicContainer[i].style.color = "#000000";
+      }
+
+      document.getElementById(id).style.background = "#2ecc71";
+      document.getElementById(id).style.color = "#ffffff";
+
       musicPlaying.innerHTML = musicList[i].name;
       audio.src = musicList[i].file;
       audio.currentTime = 0;
-      audio.volume = 0.01;
-      buttonPlaying.className = "fas fa-play";
+      audio.volume = 0.5;
+      buttonPlaying.className = "fas fa-play-circle";
       audio.play();
 
       musicInterval = setInterval(function () {
@@ -48,7 +65,7 @@ function startMusic(id) {
         rangeDuration.value = Math.floor(audio.currentTime);
 
         if (audio.currentTime == audio.duration) {
-          buttonPlaying.className = "fas fa-pause";
+          buttonPlaying.className = "fas fa-pause-circle";
         }
       });
     }
@@ -83,17 +100,17 @@ rangeDuration.addEventListener("input", function () {
   getTime = rangeDuration.value;
 
   if (rangeDuration.value == Math.floor(audio.duration)) {
-    buttonPlaying.className = "fas fa-pause";
+    buttonPlaying.className = "fas fa-pause-circle";
   }
 });
 
 buttonPlaying.addEventListener("click", function () {
-  if (this.className == "fas fa-play") {
-    this.className = "fas fa-pause";
+  if (this.className == "fas fa-play-circle") {
+    this.className = "fas fa-pause-circle";
     getTime = audio.currentTime;
     audio.pause();
   } else {
-    this.className = "fas fa-play";
+    this.className = "fas fa-play-circle";
     audio.currentTime = getTime;
     audio.play();
   }
@@ -146,4 +163,11 @@ function saveSong(status) {
 
 function closeSection() {
   importFileBcg.style.display = "none";
+}
+
+function musicVolume(e) {
+  var numberDuration = document.getElementById("number-volume");
+  var musicValue = e.target.value;
+  numberDuration.innerHTML = Math.floor(parseFloat(musicValue) * 100) + "%";
+  audio.volume = musicValue;
 }
