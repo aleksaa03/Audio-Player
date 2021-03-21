@@ -33,9 +33,9 @@
         <h3 id="music-duration"></h3>
         <input type="range" name="" id="range-duration" />
         <div class="play-controls">
-          <i class="fas fa-step-backward"></i>
+          <i id="backward" class="fas fa-step-backward" onclick="changeSong(event)"></i>
           <i class="fas fa-play-circle" id="button-playing"></i>
-          <i class="fas fa-step-forward"></i>
+          <i id="forward" class="fas fa-step-forward" onclick="changeSong(event)"></i>
         </div>
       </div>
       <div class="volume">

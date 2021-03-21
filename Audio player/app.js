@@ -35,12 +35,15 @@ var musicDuration = document.getElementById("music-duration");
 var rangeDuration = document.getElementById("range-duration");
 
 var musicInterval, getTime;
+var getSongId = 0;
 
 function startMusic(id) {
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
+      getSongId = id;
       clearInterval(musicInterval);
       rangeDuration.style.display = "inline";
+
       var musicContainer = document.querySelectorAll(".music");
 
       for (let i = 0; i < musicContainer.length; i++) {
@@ -170,4 +173,21 @@ function musicVolume(e) {
   var musicValue = e.target.value;
   numberDuration.innerHTML = Math.floor(parseFloat(musicValue) * 100) + "%";
   audio.volume = musicValue;
+}
+
+function changeSong(e) {
+  if (e.target.id == "forward") {
+    if (getSongId == musicList.length - 1) {
+      getSongId = musicList[musicList.length - 1].id;
+    } else {
+      getSongId++;
+    }
+  } else {
+    if (getSongId == 0) {
+      getSongId == 0;
+    } else {
+      getSongId--;
+    }
+  }
+  startMusic(getSongId);
 }
