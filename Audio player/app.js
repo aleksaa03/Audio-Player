@@ -3,22 +3,23 @@ var library = document.getElementById("library");
 var buttonPlaying = document.getElementById("button-playing");
 
 var musicList = [
-  // {
-  //   name: "Hot",
-  //   id: 0,
-  //   size: 4.54,
-  //   file: "media/hot.mp3",
-  // },
-  // {
-  //   name: "loud",
-  //   id: 1,
-  //   size: 4.54,
-  //   file: "media/loud_indian_music.mp3",
-  // },
+  {
+    name: "Hot",
+    id: 0,
+    size: 4.54,
+    file: "media/hot.mp3",
+  },
+  {
+    name: "loud",
+    id: 1,
+    size: 4.54,
+    file: "media/loud_indian_music.mp3",
+  },
 ];
 
 for (var i = 0; i < musicList.length; i++) {
   library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
+    <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
     <h1>${musicList[i].name}</h1>
     <h4>Size: ${musicList[i].size}MB</h4>
     <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
@@ -57,7 +58,7 @@ function startMusic(id) {
       musicPlaying.innerHTML = musicList[i].name;
       audio.src = musicList[i].file;
       audio.currentTime = 0;
-      audio.volume = 0.5;
+      audio.volume = 0.01;
       buttonPlaying.className = "fas fa-play-circle";
       audio.play();
 
@@ -190,4 +191,25 @@ function changeSong(e) {
     }
   }
   startMusic(getSongId);
+}
+
+function deleteSong(id) {
+  for (var i = 0; i < musicList.length; i++) {
+    if (musicList[i].id == id) {
+      musicList.splice(i, 1);
+    }
+  }
+
+  library.innerHTML = "";
+  for (var i = 0; i < musicList.length; i++) {
+    library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
+      <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
+      <h1>${musicList[i].name}</h1>
+      <h4>Size: ${musicList[i].size}MB</h4>
+      <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
+    </div>`;
+  }
+
+  document.getElementById(getSongId).style.background = "#2ecc71";
+  document.getElementById(getSongId).style.color = "#ffffff";
 }

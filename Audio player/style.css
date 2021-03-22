@@ -27,6 +27,15 @@
   border-radius: 10px;
   padding: 10px;
   margin: 30px;
+  position: relative;
+  cursor: pointer;
+}
+.library .music i {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #e74c3c;
+  font-size: 20px;
   cursor: pointer;
 }
 .library .music h1 {
@@ -63,6 +72,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  color: #e74c3c;
   cursor: pointer;
 }
 .import-file-bcg .import-file input[type="file"] {
