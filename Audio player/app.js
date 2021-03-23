@@ -2,28 +2,38 @@ var audio = document.getElementById("audio");
 var library = document.getElementById("library");
 var buttonPlaying = document.getElementById("button-playing");
 
-var musicList = [
-  {
-    name: "Hot",
-    id: 0,
-    size: 4.54,
-    file: "media/hot.mp3",
-  },
-  {
-    name: "loud",
-    id: 1,
-    size: 4.54,
-    file: "media/loud_indian_music.mp3",
-  },
-];
+// var musicList = [
+//   {
+//     name: "Hot",
+//     id: 0,
+//     size: 4.54,
+//     file: "media/hot.mp3",
+//   },
+//   {
+//     name: "loud",
+//     id: 1,
+//     size: 4.54,
+//     file: "media/loud_indian_music.mp3",
+//   },
+// ];
 
-for (var i = 0; i < musicList.length; i++) {
-  library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
+function saveSongs(list) {
+  var save = JSON.parse(localStorage.getItem("audio-app-songs")) || [];
+  save.push(list);
+  localStorage.setItem("audio-app-songs", JSON.stringify(save));
+}
+
+var musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
+
+if (musicList != null) {
+  for (var i = 0; i < musicList.length; i++) {
+    library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
     <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
     <h1>${musicList[i].name}</h1>
     <h4>Size: ${musicList[i].size}MB</h4>
     <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
   </div>`;
+  }
 }
 
 var musicPlaying = document.getElementById("music-playing");
@@ -39,6 +49,7 @@ var musicInterval, getTime;
 var getSongId = 0;
 
 function startMusic(id) {
+  musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
       getSongId = id;
@@ -58,7 +69,7 @@ function startMusic(id) {
       musicPlaying.innerHTML = musicList[i].name;
       audio.src = musicList[i].file;
       audio.currentTime = 0;
-      audio.volume = 0.01;
+      audio.volume = 0.5;
       buttonPlaying.className = "fas fa-play-circle";
       audio.play();
 
@@ -137,27 +148,39 @@ function openFile() {
 }
 
 var inputName = document.getElementById("name");
-var idCounter = 0;
 
 function saveSong(status) {
+  musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
   var file = fileUpload.files[0];
   if (!status) {
     if (file != undefined) {
-      musicList.push({
-        id: idCounter++,
-        name: inputName.value,
-        file: "media/" + file.name,
-        size: Math.round((file.size / 1024 / 1024) * 100) / 100,
-      });
+      if (musicList != null && musicList.length != 0) {
+        saveSongs({
+          id: musicList[musicList.length - 1].id + 1,
+          name: inputName.value,
+          file: savedDir + "/" + file.name,
+          size: Math.round((file.size / 1024 / 1024) * 100) / 100,
+        });
+      } else {
+        saveSongs({
+          id: 0,
+          name: inputName.value,
+          file: savedDir + "/" + file.name,
+          size: Math.round((file.size / 1024 / 1024) * 100) / 100,
+        });
+      }
       library.innerHTML = "";
+      musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
       for (var i = 0; i < musicList.length; i++) {
         library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
+        <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
         <h1>${musicList[i].name}</h1>
         <h4>Size: ${musicList[i].size}MB</h4>
         <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
       </div>`;
       }
       inputName.value = "";
+      fileDetails.innerHTML = "";
       importFileBcg.style.display = "none";
     }
   } else {
@@ -194,10 +217,15 @@ function changeSong(e) {
 }
 
 function deleteSong(id) {
+  musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
       musicList.splice(i, 1);
+      localStorage.setItem("audio-app-songs", JSON.stringify(musicList));
     }
+  }
+  if (musicList.length == 0) {
+    localStorage.removeItem("audio-app-songs");
   }
 
   library.innerHTML = "";
@@ -212,4 +240,24 @@ function deleteSong(id) {
 
   document.getElementById(getSongId).style.background = "#2ecc71";
   document.getElementById(getSongId).style.color = "#ffffff";
+}
+
+var importDirBcg = document.getElementById("import-dir-bcg");
+var savedDir = localStorage.getItem("audio-app-dir");
+
+if (savedDir == null) {
+  importDirBcg.style.display = "block";
+  importDirBcg.innerHTML = `<div class="import-dir">
+    <input type="text" name="" id="dir-location" placeholder="Enter DIR name" autocomplete="off"/>
+    <button onclick="saveDir(event)">Save</button>
+  </div>`;
+}
+
+function saveDir(e) {
+  var inputDir = e.target.parentElement.children[0].value;
+  if (inputDir != "") {
+    localStorage.setItem("audio-app-dir", inputDir.split("\\").join("/"));
+    importDirBcg.style.display = "none";
+    location.reload();
+  }
 }

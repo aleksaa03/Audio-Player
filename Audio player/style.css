@@ -41,15 +41,22 @@
 .library .music h1 {
   font-size: 25px;
 }
-.import-file-bcg {
+.import-file-bcg,
+.import-dir-bcg {
   background: rgba(0, 0, 0, 0.5);
   height: 100%;
   width: 100%;
   position: absolute;
   z-index: 1;
+}
+.import-file-bcg {
   display: none;
 }
-.import-file-bcg .import-file {
+.import-dir-bcg {
+  display: none;
+}
+.import-file-bcg .import-file,
+.import-dir-bcg .import-dir {
   height: 300px;
   width: 300px;
   background: #ffffff;
@@ -78,7 +85,8 @@
 .import-file-bcg .import-file input[type="file"] {
   display: none;
 }
-.import-file-bcg .import-file button {
+.import-file-bcg .import-file button,
+.import-dir-bcg .import-dir button {
   height: 40px;
   width: 130px;
   border-radius: 5px;
@@ -88,7 +96,8 @@
   outline: none;
   cursor: pointer;
 }
-.import-file-bcg .import-file input[type="text"] {
+.import-file-bcg .import-file input[type="text"],
+.import-dir-bcg .import-dir input[type="text"] {
   height: 40px;
   width: 250px;
   border-radius: 5px;
@@ -100,6 +109,9 @@
 .import-file-bcg .import-file h3 {
   line-height: 40px;
 }
+.import-dir-bcg .import-dir input[type="text"] {
+  margin: 10px 0;
+}
 .play-section {
   text-align: center;
   position: fixed;
@@ -110,6 +122,12 @@
   width: 100%;
   height: 100px;
   padding: 5px;
+}
+.play-section #release {
+  pointer-events: none;
+  position: absolute;
+  left: 20px;
+  bottom: 0;
 }
 .play-section .play h3,
 .play-section .play input[type="range"] {
