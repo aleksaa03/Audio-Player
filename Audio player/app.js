@@ -1,6 +1,7 @@
 var audio = document.getElementById("audio");
 var library = document.getElementById("library");
 var buttonPlaying = document.getElementById("button-playing");
+var buttonLoop = document.getElementById("loop");
 
 // var musicList = [
 //   {
@@ -46,13 +47,13 @@ var musicDuration = document.getElementById("music-duration");
 var rangeDuration = document.getElementById("range-duration");
 
 var musicInterval, getTime;
-var getSongId = 0;
+var songId = 0;
 
 function startMusic(id) {
   musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
   for (var i = 0; i < musicList.length; i++) {
     if (musicList[i].id == id) {
-      getSongId = id;
+      songId = id;
       clearInterval(musicInterval);
       rangeDuration.style.display = "inline";
 
@@ -80,7 +81,11 @@ function startMusic(id) {
         rangeDuration.value = Math.floor(audio.currentTime);
 
         if (audio.currentTime == audio.duration) {
-          buttonPlaying.className = "fas fa-pause-circle";
+          if (audio.loop) {
+            buttonPlaying.className = "fas fa-play-circle";
+          } else {
+            buttonPlaying.className = "fas fa-pause-circle";
+          }
         }
       });
     }
@@ -115,7 +120,11 @@ rangeDuration.addEventListener("input", function () {
   getTime = rangeDuration.value;
 
   if (rangeDuration.value == Math.floor(audio.duration)) {
-    buttonPlaying.className = "fas fa-pause-circle";
+    if (audio.loop) {
+      buttonPlaying.className = "fas fa-play-circle";
+    } else {
+      buttonPlaying.className = "fas fa-pause-circle";
+    }
   }
 });
 
@@ -131,12 +140,28 @@ buttonPlaying.addEventListener("click", function () {
   }
 });
 
+buttonLoop.addEventListener("click", function () {
+  if (this.style.color == "") {
+    this.style.color = "#2ecc71";
+    audio.loop = true;
+  } else {
+    this.style.color = "";
+    audio.loop = false;
+  }
+});
+
+var fileExtensions = [".mp3", ".wav"];
+
 function getFile(e) {
   var file = e.target.files[0];
   fileDetails.innerHTML = `File Name: ${file.name} <br> Size: ${
     Math.round((file.size / 1024 / 1024) * 100) / 100
   }MB`;
-  inputName.value = file.name.replace(".mp3", "");
+  for (var i = 0; i < fileExtensions.length; i++) {
+    if (file.name.includes(fileExtensions[i])) {
+      inputName.value = file.name.replace(fileExtensions[i], "");
+    }
+  }
 }
 
 var fileUpload = document.getElementById("file-upload");
@@ -148,6 +173,7 @@ function openFile() {
 }
 
 var inputName = document.getElementById("name");
+var song = 0;
 
 function saveSong(status) {
   musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
@@ -155,22 +181,20 @@ function saveSong(status) {
   if (!status) {
     if (file != undefined) {
       if (musicList != null && musicList.length != 0) {
-        saveSongs({
-          id: musicList[musicList.length - 1].id + 1,
-          name: inputName.value,
-          file: savedDir + "/" + file.name,
-          size: Math.round((file.size / 1024 / 1024) * 100) / 100,
-        });
+        song = musicList[musicList.length - 1].id + 1;
       } else {
-        saveSongs({
-          id: 0,
-          name: inputName.value,
-          file: savedDir + "/" + file.name,
-          size: Math.round((file.size / 1024 / 1024) * 100) / 100,
-        });
+        song = 0;
       }
+      saveSongs({
+        id: song,
+        name: inputName.value,
+        file: savedDir + "/" + file.name,
+        size: Math.round((file.size / 1024 / 1024) * 100) / 100,
+      });
+
       library.innerHTML = "";
       musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
+
       for (var i = 0; i < musicList.length; i++) {
         library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
         <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
@@ -201,19 +225,19 @@ function musicVolume(e) {
 
 function changeSong(e) {
   if (e.target.id == "forward") {
-    if (getSongId == musicList.length - 1) {
-      getSongId = musicList[musicList.length - 1].id;
+    if (songId == musicList.length - 1) {
+      songId = musicList[musicList.length - 1].id;
     } else {
-      getSongId++;
+      songId++;
     }
   } else {
-    if (getSongId == 0) {
-      getSongId == 0;
+    if (songId == 0) {
+      songId == 0;
     } else {
-      getSongId--;
+      songId--;
     }
   }
-  startMusic(getSongId);
+  startMusic(songId);
 }
 
 function deleteSong(id) {
@@ -238,8 +262,8 @@ function deleteSong(id) {
     </div>`;
   }
 
-  document.getElementById(getSongId).style.background = "#2ecc71";
-  document.getElementById(getSongId).style.color = "#ffffff";
+  document.getElementById(songId).style.background = "#2ecc71";
+  document.getElementById(songId).style.color = "#ffffff";
 }
 
 var importDirBcg = document.getElementById("import-dir-bcg");
@@ -248,7 +272,7 @@ var savedDir = localStorage.getItem("audio-app-dir");
 if (savedDir == null) {
   importDirBcg.style.display = "block";
   importDirBcg.innerHTML = `<div class="import-dir">
-    <input type="text" name="" id="dir-location" placeholder="Enter DIR name" autocomplete="off"/>
+    <input type="text" name="" id="dir-location" placeholder="Enter Directory name" autocomplete="off"/>
     <button onclick="saveDir(event)">Save</button>
   </div>`;
 }
@@ -259,5 +283,28 @@ function saveDir(e) {
     localStorage.setItem("audio-app-dir", inputDir.split("\\").join("/"));
     importDirBcg.style.display = "none";
     location.reload();
+  }
+}
+
+var main = document.getElementById("main");
+var settingsContainer = document.getElementById("settings");
+var settingsBtn = document.getElementById("settings-btn");
+
+function settings(status) {
+  var changeDirInput = settingsContainer.children[0].children[1];
+  if (!status) {
+    main.style.display = "none";
+    settingsContainer.style.display = "flex";
+    settingsBtn.style.display = "none";
+  } else {
+    main.style.display = "block";
+    settingsContainer.style.display = "none";
+    settingsBtn.style.display = "block";
+
+    if (changeDirInput.value != "" || changeDirInput.value != savedDir) {
+      localStorage.setItem("audio-app-dir", changeDirInput.value.split("\\").join("/"));
+    }
+
+    changeDirInput.value = "";
   }
 }

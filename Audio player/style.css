@@ -4,7 +4,8 @@
   font-family: sans-serif;
   font-weight: 500;
 }
-#import-song {
+#import-song,
+#settings-btn {
   height: 40px;
   width: 130px;
   margin: 10px;
@@ -13,7 +14,12 @@
   border: none;
   color: #ffffff;
   outline: none;
+  transition: 0.25s;
   cursor: pointer;
+}
+#import-song:hover,
+#settings-btn:hover {
+  background: #27ae60;
 }
 .library {
   display: flex;
@@ -34,12 +40,12 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #e74c3c;
+  color: #707070;
   font-size: 20px;
   cursor: pointer;
 }
 .library .music h1 {
-  font-size: 25px;
+  font-size: 20px;
 }
 .import-file-bcg,
 .import-dir-bcg {
@@ -79,14 +85,15 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #e74c3c;
+  color: #707070;
   cursor: pointer;
 }
 .import-file-bcg .import-file input[type="file"] {
   display: none;
 }
 .import-file-bcg .import-file button,
-.import-dir-bcg .import-dir button {
+.import-dir-bcg .import-dir button,
+.settings button {
   height: 40px;
   width: 130px;
   border-radius: 5px;
@@ -94,15 +101,21 @@
   border: none;
   color: #ffffff;
   outline: none;
+  transition: 0.25s;
   cursor: pointer;
+}
+.import-file-bcg .import-file button:hover,
+.import-dir-bcg .import-dir button:hover,
+.settings button:hover {
+  background: #27ae60;
 }
 .import-file-bcg .import-file input[type="text"],
 .import-dir-bcg .import-dir input[type="text"] {
-  height: 40px;
+  height: 30px;
   width: 250px;
   border-radius: 5px;
   border: 1px solid #e0e0e0;
-  font-size: 20px;
+  font-size: 15px;
   padding: 5px;
   outline: none;
 }
@@ -147,10 +160,45 @@
   display: block;
   margin: 5px 10px;
   color: #2ecc71;
+  transition: 0.25s;
   cursor: pointer;
+}
+.play-section .play .play-controls i:hover {
+  color: #27ae60;
+}
+.play-section .play .play-controls #loop {
+  color: #000000;
+  font-size: 15px;
 }
 .play-section .volume {
   position: absolute;
   top: 80px;
   right: 20px;
+}
+.settings {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.settings .settings-dir h1,
+.settings-dir input[type="text"] {
+  margin: 10px 0;
+}
+.settings .settings-dir input[type="text"] {
+  height: 30px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  font-size: 15px;
+  padding: 5px;
+  outline: none;
+}
+.hr {
+  height: 10px;
+  width: 500px;
+  margin: 10px 0;
+  background: #e0e0e0;
+  border-radius: 24px;
 }
