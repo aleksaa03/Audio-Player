@@ -29,7 +29,7 @@ var musicList = JSON.parse(localStorage.getItem("audio-app-songs"));
 if (musicList != null) {
   for (var i = 0; i < musicList.length; i++) {
     library.innerHTML += `<div class="music" id="${musicList[i].id}" onclick="startMusic(${musicList[i].id})">
-    <i class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
+    <i id="delete" class="fas fa-trash" onclick="deleteSong(${musicList[i].id})"></i>
     <h1>${musicList[i].name}</h1>
     <h4>Size: ${musicList[i].size}MB</h4>
     <h4 class="id-playing" id="playing${musicList[i].id}"></h4>
@@ -150,18 +150,12 @@ buttonLoop.addEventListener("click", function () {
   }
 });
 
-var fileExtensions = [".mp3", ".wav"];
-
 function getFile(e) {
   var file = e.target.files[0];
   fileDetails.innerHTML = `File Name: ${file.name} <br> Size: ${
     Math.round((file.size / 1024 / 1024) * 100) / 100
   }MB`;
-  for (var i = 0; i < fileExtensions.length; i++) {
-    if (file.name.includes(fileExtensions[i])) {
-      inputName.value = file.name.replace(fileExtensions[i], "");
-    }
-  }
+  inputName.value = file.name.replace(".mp3", "");
 }
 
 var fileUpload = document.getElementById("file-upload");
