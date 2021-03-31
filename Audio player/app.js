@@ -290,6 +290,7 @@ function settings(status) {
     main.style.display = "none";
     settingsContainer.style.display = "flex";
     settingsBtn.style.display = "none";
+    changeDirInput.value = savedDir;
   } else {
     main.style.display = "block";
     settingsContainer.style.display = "none";
