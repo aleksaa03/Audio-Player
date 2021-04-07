@@ -84,7 +84,8 @@ function startMusic(id) {
           if (audio.loop) {
             buttonPlaying.className = "fas fa-play-circle";
           } else {
-            buttonPlaying.className = "fas fa-pause-circle";
+            songId++;
+            startMusic(songId);
           }
         }
       });
@@ -119,6 +120,7 @@ rangeDuration.addEventListener("input", function () {
   audio.currentTime = rangeDuration.value;
   getTime = rangeDuration.value;
 
+  console.log(songId);
   if (rangeDuration.value == Math.floor(audio.duration)) {
     if (audio.loop) {
       buttonPlaying.className = "fas fa-play-circle";
